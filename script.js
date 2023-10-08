@@ -52,7 +52,7 @@ class Cycling extends Workout {
 
 
 ////////////////////////////////////////////////////////
-// Note://APPLICATION ARCHITECTUR
+// Note:APPLICATION ARCHITECTURE
 class App {
   #map;
   #mapEvent;
