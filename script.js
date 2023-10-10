@@ -4,6 +4,7 @@ class Workout {
   date = new Date();
   id = (Date.now() + ' ').slice(-10);
   clicks  = 0;
+  
   constructor(coords, distance, duration) {
     this.coords = coords; // [lan, lng]
     this.distance = distance; //in KM
@@ -33,6 +34,9 @@ class Running extends Workout {
     // Min/km
     this.pace = this.duration / this.distance;
     return this.pace;
+  }
+    click() {
+    this.clicks++;
   }
 }
 
@@ -72,9 +76,7 @@ class App {
   #workouts = [];
   constructor() {
     this.#getPosition();
-
     form.addEventListener('submit', this.#newWorkout.bind(this));
-
     inputType.addEventListener('change', this.#toggleElevationField);
     containerWorkouts.addEventListener('click', this.#moveToPopup.bind(this));
   }
@@ -94,7 +96,7 @@ class App {
     const { longitude } = position.coords;
     const coords = [latitude, longitude];
 
-    this.#map = L.map('map').setView(coords, #mapZoomLevel);
+    this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
     // console.log(map);
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution:
@@ -264,7 +266,7 @@ class App {
     );
     console.log(workout);
 
-    this.#map.setView(workout.coords, this.mapZoomLevel, {
+    this.#map.setView(workout.coords, this.#mapZoomLevel, {
       animate: true,
       pan: {
         duration: 1,
