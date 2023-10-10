@@ -3,7 +3,7 @@
 class Workout {
   date = new Date();
   id = (Date.now() + ' ').slice(-10);
-
+  clicks  = 0;
   constructor(coords, distance, duration) {
     this.coords = coords; // [lan, lng]
     this.distance = distance; //in KM
@@ -67,6 +67,7 @@ const inputElevation = document.querySelector('.form__input--elevation');
 
 class App {
   #map;
+  #mapZoomLevel = 13;
   #mapEvent;
   #workouts = [];
   constructor() {
@@ -75,6 +76,7 @@ class App {
     form.addEventListener('submit', this.#newWorkout.bind(this));
 
     inputType.addEventListener('change', this.#toggleElevationField);
+    containerWorkouts.addEventListener('click', this.#moveToPopup.bind(this));
   }
 
   #getPosition() {
@@ -92,7 +94,7 @@ class App {
     const { longitude } = position.coords;
     const coords = [latitude, longitude];
 
-    this.#map = L.map('map').setView(coords, 13);
+    this.#map = L.map('map').setView(coords, #mapZoomLevel);
     // console.log(map);
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution:
@@ -175,7 +177,7 @@ class App {
     this.#workouts.push(workout);
 
     // Render workout on map as marker
-    this.renderWorkoutMarker(workout);
+    this.#renderWorkoutMarker(workout);
 
     // Render workout on list
     this.#renderWorkout(workout);
@@ -202,7 +204,7 @@ class App {
 
     #renderWorkout(workout) {
     let html = `
-      <li class="workout workout--${workout.type}" data-id="${Worker.id}">
+      <li class="workout workout--${workout.type}" data-id="${workout.id}">
         <h2 class="workout__title">${workout.description}</h2>
         <div class="workout__details">
           <span class="workout__icon">${
@@ -250,6 +252,29 @@ class App {
 
     form.insertAdjacentHTML('afterend', html);
   }
+
+  #moveToPopup(e) {
+    const workoutEL = e.target.closest('.workout');
+    console.log(workoutEL);
+
+    if (!workoutEL) return;
+
+    const workout = this.#workouts.find(
+      work => work.id === workoutEL.dataset.id
+    );
+    console.log(workout);
+
+    this.#map.setView(workout.coords, this.mapZoomLevel, {
+      animate: true,
+      pan: {
+        duration: 1,
+      },
+    });
+
+    //Using the public interface(API)
+    workout.click();
+  }
+  
 }
 
 const app = new App();
