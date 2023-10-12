@@ -218,3 +218,43 @@ a:visited {
 .cycling-popup .leaflet-popup-content-wrapper {
   border-left: 5px solid var(--color-brand--1);
 }
+
+@media (max-width: 378px) {
+  body {
+    padding: 0;
+    display: grid;
+  }
+
+  #map {
+    display: grid;
+    width: 100%;
+    height: 50vh;
+    order: 1;
+    position: relative;
+    top: 8px;
+    z-index: 1;
+  }
+
+  .sidebar {
+    padding: 3rem 2rem 4rem 2rem;
+    display: grid;
+    order: 2;
+    height: 57vh;
+    border-radius: 10px 10px 0 0;
+    z-index: 2;
+  }
+
+  .workouts {
+    height: 30vh;
+  }
+
+  .workout__value,
+  .workout__unit {
+    font-size: smaller;
+  }
+
+  .copyright {
+    margin-top: 15px;
+  }
+}
+
